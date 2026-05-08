@@ -212,6 +212,24 @@ footer{background:var(--verde-oscuro);color:rgba(255,255,255,.65);padding:3rem 2
 .lb-close{position:fixed;top:20px;right:24px;color:white;font-size:2rem;cursor:pointer;font-weight:300;line-height:1;z-index:1001;background:rgba(0,0,0,.4);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
 .lb-close:hover{background:rgba(0,0,0,.7)}
 .lb-trigger{cursor:zoom-in}
+
+.menu-btn{display:inline-flex;align-items:center;gap:8px;background:var(--verde-oscuro);color:white;font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase;padding:12px 24px;border-radius:4px;border:none;cursor:pointer;transition:all .2s;font-family:var(--cuerpo);margin-top:1rem}
+.menu-btn:hover{background:var(--verde);transform:translateY(-1px)}
+.menu-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+.menu-modal.open{display:flex}
+.menu-modal-inner{background:var(--blanco);border-radius:12px;max-width:680px;width:100%;padding:2.5rem;position:relative;margin:auto}
+.menu-modal-close{position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--gris-texto);line-height:1}
+.menu-modal-close:hover{color:var(--texto)}
+.menu-modal h2{font-family:var(--titulo);font-size:1.6rem;color:var(--verde-oscuro);margin-bottom:.25rem}
+.menu-modal .menu-sub{font-size:.875rem;color:var(--gris-texto);margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:1px solid var(--gris-med)}
+.menu-cat{margin-bottom:1.5rem}
+.menu-cat h3{font-family:var(--titulo);font-size:1rem;color:var(--verde-oscuro);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:2px solid var(--dorado);display:inline-block}
+.menu-item{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px dotted var(--gris-med);font-size:.875rem}
+.menu-item:last-child{border-bottom:none}
+.menu-item-name{color:var(--texto);flex:1}
+.menu-item-price{color:var(--verde);font-weight:700;font-size:.8rem;white-space:nowrap;margin-left:1rem}
+.menu-nota{background:var(--verde-suave);border-radius:6px;padding:.75rem 1rem;font-size:.8rem;color:var(--gris-texto);margin-top:1rem;line-height:1.6}
+@media(max-width:600px){.menu-modal-inner{padding:1.5rem}}
 </style>
 </head>
 <body>
@@ -479,8 +497,8 @@ footer{background:var(--verde-oscuro);color:rgba(255,255,255,.65);padding:3rem 2
           <div class="chips">
             <span class="chip"><strong>Días:</strong> Martes y sábados de subasta</span>
             <span class="chip">Comida, bebidas y cerveza</span>
-            <span class="chip">Menú disponible en el sitio</span>
           </div>
+          <button class="menu-btn" onclick="openMenuModal()">Ver menú completo</button>
         </div>
       </div>
     </div>
@@ -815,6 +833,18 @@ footer{background:var(--verde-oscuro);color:rgba(255,255,255,.65);padding:3rem 2
   }
 })();
 
+
+function openMenuModal() {
+  document.getElementById('menuModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenuModal(e) {
+  if (!e || e.target === document.getElementById('menuModal') || e.target.classList.contains('menu-modal-close')) {
+    document.getElementById('menuModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
 function openLightbox(src, alt) {
   document.getElementById('lb-img').src = src;
   document.getElementById('lb-img').alt = alt || '';
@@ -834,6 +864,61 @@ document.addEventListener('keydown', function(e) {
 <div class="lb-overlay" id="lightbox" onclick="closeLightbox()">
   <div class="lb-close" onclick="closeLightbox()">&#x2715;</div>
   <img id="lb-img" src="" alt="">
+</div>
+
+<div class="menu-modal" id="menuModal" onclick="closeMenuModal(event)">
+  <div class="menu-modal-inner">
+    <button class="menu-modal-close" onclick="closeMenuModal()">&times;</button>
+    <h2>Menú del Restaurante</h2>
+    <p class="menu-sub">Disponible los días de subasta — martes y sábados. Precios en colones.</p>
+
+    <div class="menu-cat">
+      <h3>Desayunos</h3>
+      <div class="menu-item"><span class="menu-item-name">Desayuno completo (pinto, huevo, carne en salsa, queso natural o frito, maduros, pan o tortilla casera)</span><span class="menu-item-price">₡3.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Pinto</span><span class="menu-item-price">—</span></div>
+      <div class="menu-item"><span class="menu-item-name">Huevos rancheros / fritos / picados</span><span class="menu-item-price">—</span></div>
+    </div>
+
+    <div class="menu-cat">
+      <h3>Casados</h3>
+      <div class="menu-item"><span class="menu-item-name">Casado con carne en salsa o pollo sudado</span><span class="menu-item-price">₡3.500</span></div>
+      <div class="menu-item"><span class="menu-item-name">Casado con pata de cerdo o mondongo en salsa</span><span class="menu-item-price">₡3.500</span></div>
+      <div class="menu-item"><span class="menu-item-name">Casado con bistec, chuleta o costilla</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Casado con filet de pescado empanizado o al ajillo</span><span class="menu-item-price">₡4.000</span></div>
+    </div>
+
+    <div class="menu-cat">
+      <h3>Otros platos</h3>
+      <div class="menu-item"><span class="menu-item-name">Dedos de pollo con papas y ensalada</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Dedos de pescado con papas y ensalada</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Camarones empanados con papas y ensalada</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Arroz con camarones con papas y ensalada</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Mariscada</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Sopa de marisco</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Ceviche</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Churrasco</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Mar y tierra</span><span class="menu-item-price">₡4.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Costilla con papas y ensalada</span><span class="menu-item-price">₡4.000</span></div>
+    </div>
+
+    <div class="menu-cat">
+      <h3>Repostería</h3>
+      <div class="menu-item"><span class="menu-item-name">Rebanada de queque seco</span><span class="menu-item-price">₡500</span></div>
+      <div class="menu-item"><span class="menu-item-name">Empanadas caseras</span><span class="menu-item-price">₡500</span></div>
+      <div class="menu-item"><span class="menu-item-name">Empanadas de frijoles o queso fritas (solo martes)</span><span class="menu-item-price">₡800</span></div>
+    </div>
+
+    <div class="menu-cat">
+      <h3>Bebidas</h3>
+      <div class="menu-item"><span class="menu-item-name">Café negro o con leche</span><span class="menu-item-price">₡700</span></div>
+      <div class="menu-item"><span class="menu-item-name">Frescos (té blanco, té de melocotón)</span><span class="menu-item-price">—</span></div>
+      <div class="menu-item"><span class="menu-item-name">Refrescos</span><span class="menu-item-price">₡1.000</span></div>
+      <div class="menu-item"><span class="menu-item-name">Cerveza nacional</span><span class="menu-item-price">₡1.500</span></div>
+      <div class="menu-item"><span class="menu-item-name">Tragos</span><span class="menu-item-price">₡2.500</span></div>
+    </div>
+
+    <div class="menu-nota">Los precios pueden variar. Consulte disponibilidad de platillos el día del evento.</div>
+  </div>
 </div>
 </body>
 </html>
